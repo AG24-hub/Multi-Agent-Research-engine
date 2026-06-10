@@ -156,7 +156,12 @@ function App()  {
       // FIX 2: Wrap topic in an object matching your FastAPI dict schema
       const response = await axios.post(
         `${API_URL}/research`,
-        { topic: topic.trim() } 
+        { topic: topic.trim() },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       setResults(response.data);
