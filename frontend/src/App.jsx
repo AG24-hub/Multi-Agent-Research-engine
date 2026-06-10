@@ -140,8 +140,7 @@ function App()  {
       setRunning(true);
       setResults({});
 
-      const response = await axios.post(
-        "http://localhost:8000/research",
+      const response = await axios.post("/research",
         {
           topic,
         }
