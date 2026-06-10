@@ -140,8 +140,10 @@ function App()  {
       setRunning(true);
       setResults({});
 
+
+      const API_URL = import.meta.env.VITE_API_URL;
       const response = await axios.post(
-        "http://localhost:8000/research",
+        `${API_URL}/research`,
         {
           topic,
         }
