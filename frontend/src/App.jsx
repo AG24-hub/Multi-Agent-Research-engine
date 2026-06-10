@@ -129,6 +129,14 @@ function App()  {
   const [topic, setTopic] = useState("");
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState({});
+  
+  // FIX 1: Initialize step states state hook
+  const [stepStates, setStepStates] = useState({
+    search: "wait",
+    reader: "wait",
+    writer: "wait",
+    critic: "wait",
+  });
 
   const setStep = (step, state) =>
     setStepStates((prev) => ({ ...prev, [step]: state }));
@@ -139,17 +147,21 @@ function App()  {
     try {
       setRunning(true);
       setResults({});
+      
+      // Reset all steps to active/waiting state cycle
+      STEPS.forEach(s => setStep(s, "wait"));
 
       const API_URL = import.meta.env.VITE_API_URL;
+      
+      // FIX 2: Wrap topic in an object matching your FastAPI dict schema
       const response = await axios.post(
         `${API_URL}/research`,
-        topic
+        { topic: topic.trim() } 
       );
 
       setResults(response.data);
     } catch (error) {
       console.error("Pipeline Error:", error);
-
       alert(
         error.response?.data?.detail ||
         "Failed to connect to FastAPI backend"
@@ -239,7 +251,7 @@ function App()  {
           {/* Right — Pipeline */}
           <div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "1.1rem", fontWeight: 700, color: "#f0ebe0", marginBottom: "1rem" }}>Pipeline</div>
-            {STEP_META.map((meta) => (
+            {STEP_META.map((meta, idx) => (
               <StepCard
                 key={meta.num}
                 num={meta.num}
@@ -247,7 +259,7 @@ function App()  {
                 desc={meta.desc}
                 state={
                   running
-                    ? "active"
+                    ? stepStates[STEPS[idx]]
                     : results.writer
                     ? "done"
                     : "wait"
