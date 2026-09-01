@@ -149,9 +149,14 @@ function App()  {
       setResults({});
       
       // Reset all steps to active/waiting state cycle
-      STEPS.forEach(s => setStep(s, "wait"));
+      setStep("search", "active");
 
       const API_URL = import.meta.env.VITE_API_URL;
+
+      // Simulate step progression timing if your backend is monolithic
+      const timer1 = setTimeout(() => { setStep("search", "done"); setStep("reader", "active"); }, 6000);
+      const timer2 = setTimeout(() => { setStep("reader", "done"); setStep("writer", "active"); }, 15000);
+      const timer3 = setTimeout(() => { setStep("writer", "done"); setStep("critic", "active"); }, 25000);
       
       // FIX 2: Wrap topic in an object matching your FastAPI dict schema
       const response = await axios.post(
