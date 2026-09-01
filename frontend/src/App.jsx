@@ -130,14 +130,6 @@ function App()  {
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState({});
   
-  // FIX 1: Initialize step states state hook
-  const [stepStates, setStepStates] = useState({
-    search: "wait",
-    reader: "wait",
-    writer: "wait",
-    critic: "wait",
-  });
-
   const setStep = (step, state) =>
     setStepStates((prev) => ({ ...prev, [step]: state }));
 
